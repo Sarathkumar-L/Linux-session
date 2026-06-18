@@ -1,0 +1,263 @@
+# LINUX LAB EXERCISE – BASIC FILE & DIRECTORY COMMANDS
+
+# Exercise 1: Create Directories
+
+## Create a Single Directory
+
+mkdir <directory_name>
+
+Task:
+
+* Create a directory with any name of your choice.
+* Verify using ls.
+
+## Create Multiple Directories
+
+mkdir <directory1> <directory2>
+
+Task:
+
+* Create two directories at the same time.
+
+## Create Multiple Numbered Directories
+
+mkdir <directory_prefix>{1..5}
+
+Example:
+project1
+project2
+project3
+project4
+project5
+
+Task:
+
+* Create 5 numbered directories using brace expansion.
+
+# Exercise 2: Create Files
+
+## Create a Single File
+
+touch <file_name>
+
+Task:
+
+* Create one empty file.
+
+## Create Multiple Files
+
+touch <file1> <file2> <file3>
+
+Task:
+
+* Create three files in a single command.
+
+## Create Multiple Numbered Files
+
+touch <file_prefix>{1..5}
+
+Task:
+
+* Create five numbered files.
+
+# Exercise 3: Write Data into Files
+
+## Create a New File and Add Content
+
+cat > <file_name>
+
+Type some text and press:
+
+Ctrl + D
+
+Task:
+
+* Create a file and add at least three lines of text.
+
+## Append Data to an Existing File
+
+cat >> <file_name>
+
+Type additional text and press:
+
+Ctrl + D
+
+Task:
+
+* Append at least two new lines to the file.
+
+# Exercise 4: View File Contents
+
+## Display Entire File
+
+cat <file_name>
+
+Task:
+
+* View the contents of your file.
+
+# Exercise 5: Remove Files and Directories
+
+## Remove a File
+
+rm <file_name>
+
+Task:
+
+* Delete a file.
+
+## Remove an Empty Directory
+
+rmdir <directory_name>
+
+Task:
+
+* Delete an empty directory.
+
+## Force Remove a Directory
+
+rm -rf <directory_name>
+
+Task:
+
+* Delete a directory and its contents without confirmation.
+
+# Exercise 6: Navigation Commands
+
+## Move into a Directory
+
+cd <directory_name>
+
+## Move into Nested Directories
+
+cd <directory1>/<directory2>/<directory3>
+
+## Return to Previous Directory
+
+cd -
+
+## Go to Home Directory
+
+cd
+
+## Display Present Working Directory
+
+pwd
+
+Task:
+
+* Navigate between directories and record the output of pwd.
+
+# Exercise 7: Listing Files and Directories
+
+## Basic Listing
+
+ls
+
+## Detailed Listing
+
+ls -l
+
+## Show Hidden Files
+
+ls -la
+
+## Sort by Modification Time
+
+ls -lt
+
+# File Viewing Commands
+
+## Display First 10 Lines
+
+cat <file_name> | head
+
+## Display First 2 Lines
+
+cat <file_name> | head -2
+
+## Display First 20 Lines
+
+head -20 <file_name>
+
+## Display Last 15 Lines
+
+cat <file_name> | tail -15
+
+## Display Last 10 Lines
+
+tail <file_name>
+
+## View File Using less
+
+cat <file_name> | less
+
+or
+
+less <file_name>
+
+## View File Using more
+
+cat <file_name> | more
+
+or
+
+more <file_name>
+
+# Searching Text using grep
+
+## Search for a Keyword
+
+cat <file_name> | grep <keyword_to_search>
+
+# Exercise 11: Copy Files and Directories
+
+## Copy a File
+
+cp <source_file> <destination>
+
+# Exercise 12: Move and Rename
+
+## Move a File
+
+mv <file_name> <destination_directory>
+
+## Move a Directory
+
+mv <directory_name> <destination_directory>
+
+## Rename a File
+
+mv <old_file_name> <new_file_name>
+
+# Exercise 13: Miscellaneous Commands
+
+## Write Text to a File
+
+echo "<text>" > <file_name>
+
+# Other Useful Commands
+
+## Display Kernel Name
+
+uname
+
+## Display Complete System Information
+
+uname -a
+
+## Clear the Terminal Screen
+
+clear
+
+## Display Logged-in Users and Activities
+
+w
+
+## Display Logged-in Users
+
+who
+
+## Display Current Username
+
+whoami
