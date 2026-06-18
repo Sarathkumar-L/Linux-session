@@ -1,0 +1,220 @@
+# VI, VIM EDITORS MODES
+
+• Command Mode - Press Esc (Default Mode)
+
+• Insert Mode - Press i, I, a, A, o, O
+
+• Ex Mode (Execution Mode / Escape Mode) - Press : (Shift + ;)
+
+---
+
+# COMMAND MODE
+
+Default mode of vi editor.
+
+In this mode we can:
+
+* Copy text
+* Paste text
+* Delete text
+* Search text
+* Navigate within the file
+
+## Copy Commands
+
+yy      --> Copy current line
+
+3yy     --> Copy 3 lines from current cursor position
+
+## Paste Commands
+
+p       --> Paste copied content below the cursor
+
+P       --> Paste copied content above the cursor
+
+4p      --> Paste copied content 4 times
+
+## Delete Commands
+
+dd      --> Delete (cut) current line
+
+4dd     --> Delete (cut) 4 lines
+
+## Navigation Commands
+
+G       --> Move cursor to end of file
+
+gg      --> Move cursor to beginning of file
+
+## Search Commands
+
+/word   --> Search forward for a word
+
+?word   --> Search backward for a word
+
+n       --> Next search result
+
+N       --> Previous search result
+
+## Undo / Redo
+
+u        --> Undo last change
+
+Ctrl + r --> Redo last undone change
+
+---
+
+# CURSOR MOVEMENT IN COMMAND MODE
+
+h j k l
+
+h --> Move cursor left
+
+j --> Move cursor down
+
+k --> Move cursor up
+
+l --> Move cursor right
+
+---
+
+
+# INSERT MODE
+
+Used to add or modify file contents.
+
+Switch from Command Mode to Insert Mode using:
+
+i --> Insert text before current cursor position
+
+I --> Insert text at beginning of current line
+
+a --> Add text after current cursor position
+
+A --> Add text at end of current line
+
+o --> Open a new line below current cursor position
+
+O --> Open a new line above current cursor position
+
+---
+
+# EX MODE (EXTENDED COMMAND MODE)
+
+Press : (Shift + ;) to enter Ex Mode.
+
+## Quit Commands
+
+:q      --> Quit file
+
+:q!     --> Force quit without saving
+
+## Save Commands
+
+:w      --> Save changes
+
+:w!     --> Force save changes
+
+## Save and Quit Commands
+
+:wq     --> Save and quit
+
+:wq!    --> Force save and quit
+
+:x      --> Save and quit
+
+## Encryption
+
+:X      --> Encrypt file contents
+
+## Line Navigation
+
+:25     --> Move cursor to line number 25
+
+## Line Numbers
+
+:set nu     --> Display line numbers
+
+:set nonu   --> Remove line numbers
+
+## Delete Specific Line
+
+:5d     --> Delete line number 5
+
+---
+
+# LAB EXERCISE
+
+1. Create a new file using:
+
+   vi <file_name>
+
+2. Enter Insert Mode using:
+
+   i
+
+3. Type at least 10 lines of text.
+
+4. Save the file using:
+
+   :w
+
+5. Display line numbers using:
+
+   :set nu
+
+6. Move to line number 5 using:
+
+   :5
+
+7. Copy 3 lines using:
+
+   3yy
+
+8. Paste copied lines using:
+
+   p
+
+9. Delete 2 lines using:
+
+   2dd
+
+10. Search for a word using:
+
+    /<word>
+
+11. Move to next search result using:
+
+    n
+
+12. Undo the deletion using:
+
+    u
+
+13. Redo the deletion using:
+
+    Ctrl + r
+
+14. Move to the end of file using:
+
+    G
+
+15. Move to the beginning of file using:
+
+    gg
+
+16. Save and quit using:
+
+    :wq
+
+# Expected Outcome
+
+Students should be able to:
+
+* Open files using vi editor.
+* Understand Command Mode, Insert Mode and Ex Mode.
+* Navigate within files.
+* Copy, paste and delete text.
+* Search content.
+* Undo and redo changes.
+* Save and exit files confidently.
