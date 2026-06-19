@@ -1,0 +1,416 @@
+# Linux Lab Exercise – Soft Links, Hard Links and Inode Numbers
+
+## Objective
+
+By the end of this lab, students will be able to:
+
+* Create and verify Soft Links (Symbolic Links)
+* Create and verify Hard Links
+* Understand the difference between Soft and Hard Links
+* View and compare inode numbers
+* Observe the behavior when the original file is deleted
+
+---
+
+# Exercise 1: Create a Test Environment
+
+### Step 1: Create a directory
+
+```bash
+mkdir link-lab
+cd link-lab
+```
+
+### Step 2: Create a sample file
+
+```bash
+echo "Welcome to Linux Lab" > file1.txt
+```
+
+### Step 3: Verify the file
+
+```bash
+cat file1.txt
+```
+
+**Expected Output**
+
+```text
+Welcome to Linux Lab
+```
+
+---
+
+# Exercise 2: View Inode Number of Original File
+
+### Check inode using ls
+
+```bash
+ls -li file1.txt
+```
+
+### Check inode using stat
+
+```bash
+stat file1.txt
+```
+
+### Observation
+
+Note down:
+
+* File Name
+* Inode Number
+* Permissions
+* Owner
+
+---
+
+# Exercise 3: Create a Soft Link
+
+### Create symbolic link
+
+```bash
+ln -s file1.txt softlink.txt
+```
+
+### Verify
+
+```bash
+ls -l
+```
+
+**Expected Output**
+
+```text
+lrwxrwxrwx 1 root root 9 Jun 18 10:00 softlink.txt -> file1.txt
+-rw-r--r-- 1 root root 20 Jun 18 10:00 file1.txt
+```
+
+### Read the contents
+
+```bash
+cat softlink.txt
+```
+
+---
+
+# Exercise 4: Compare Inode Numbers
+
+### Check inode numbers
+
+```bash
+ls -li
+```
+
+### Observation
+
+Compare inode numbers of:
+
+```text
+file1.txt
+softlink.txt
+```
+
+### Result
+
+✔ Soft link has a different inode number.
+
+---
+
+# Exercise 5: Modify the Original File
+
+### Append data
+
+```bash
+echo "Linux is Open Source" >> file1.txt
+```
+
+### Verify from soft link
+
+```bash
+cat softlink.txt
+```
+
+### Observation
+
+Changes are visible through the soft link because it points to the original file.
+
+---
+
+# Exercise 6: Delete Original File
+
+### Remove original file
+
+```bash
+rm file1.txt
+```
+
+### Verify
+
+```bash
+ls -l
+```
+
+### Try to access soft link
+
+```bash
+cat softlink.txt
+```
+
+**Expected Output**
+
+```text
+cat: softlink.txt: No such file or directory
+```
+
+### Result
+
+✔ Soft link becomes a hanging (broken) link.
+
+---
+
+# Exercise 7: Create a Hard Link
+
+### Create original file again
+
+```bash
+echo "Linux Hard Link Demo" > file2.txt
+```
+
+### Create hard link
+
+```bash
+ln file2.txt hardlink.txt
+```
+
+### Verify
+
+```bash
+ls -li
+```
+
+### Observation
+
+Compare inode numbers:
+
+```text
+file2.txt
+hardlink.txt
+```
+
+### Result
+
+✔ Both files have the same inode number.
+
+---
+
+# Exercise 8: Verify Hard Link Content
+
+### Read both files
+
+```bash
+cat file2.txt
+cat hardlink.txt
+```
+
+### Modify original file
+
+```bash
+echo "Additional Content" >> file2.txt
+```
+
+### Verify hard link
+
+```bash
+cat hardlink.txt
+```
+
+### Result
+
+✔ Changes reflect in both files.
+
+---
+
+# Exercise 9: Delete Original File
+
+### Remove original file
+
+```bash
+rm file2.txt
+```
+
+### Verify
+
+```bash
+ls -li
+```
+
+### Access hard link
+
+```bash
+cat hardlink.txt
+```
+
+### Result
+
+✔ Hard link still works because data still exists on disk.
+
+---
+
+# Exercise 10: Check Link Count
+
+### Create new file
+
+```bash
+echo "Link Count Demo" > file3.txt
+```
+
+### View link count
+
+```bash
+ls -li file3.txt
+```
+
+### Create two hard links
+
+```bash
+ln file3.txt hard1.txt
+ln file3.txt hard2.txt
+```
+
+### Verify
+
+```bash
+ls -li
+```
+
+### Observation
+
+Link count increases from:
+
+```text
+1 → 3
+```
+
+### Explanation
+
+There are now 3 filenames pointing to the same inode.
+
+---
+
+# Exercise 11: Soft Link to a Directory
+
+### Create directory
+
+```bash
+mkdir project
+```
+
+### Create soft link
+
+```bash
+ln -s project project_link
+```
+
+### Verify
+
+```bash
+ls -l
+```
+
+### Navigate
+
+```bash
+cd project_link
+pwd
+```
+
+### Result
+
+✔ Soft links can be created for directories.
+
+---
+
+# Exercise 12: Hard Link Limitation
+
+### Try creating hard link for directory
+
+```bash
+ln project project_hardlink
+```
+
+### Expected Output
+
+```text
+ln: project: hard link not allowed for directory
+```
+
+### Result
+
+✔ Hard links cannot normally be created for directories.
+
+---
+
+# Exercise 13: Verify with stat Command
+
+### Check original file
+
+```bash
+stat hardlink.txt
+```
+
+### Check soft link
+
+```bash
+stat softlink.txt
+```
+
+### Observation
+
+Notice:
+
+* Inode Number
+* Link Count
+* File Type
+* Permissions
+
+---
+
+# Viva Questions
+
+1. What is a Soft Link?
+2. What is a Hard Link?
+3. Which command creates a Soft Link?
+4. Which command creates a Hard Link?
+5. Can a Soft Link point to a directory?
+6. Can a Hard Link point to a directory?
+7. What happens if the original file of a Soft Link is deleted?
+8. What happens if the original file of a Hard Link is deleted?
+9. Which link has the same inode number as the original file?
+10. What is an inode?
+11. Which command displays inode numbers?
+12. What information is stored in an inode?
+13. What is a hanging link?
+14. Can Hard Links be created across different file systems?
+15. Which command displays detailed inode information?
+
+---
+
+# Expected Conclusion
+
+Students should understand:
+
+✔ Soft Link = Shortcut to original file
+
+✔ Hard Link = Another name for the same file
+
+✔ Soft Link → Different inode number
+
+✔ Hard Link → Same inode number
+
+✔ Soft Link breaks when original file is deleted
+
+✔ Hard Link continues to work even after original file is deleted
+
+✔ Inode stores metadata about files such as permissions, ownership, size, timestamps, and disk location.
