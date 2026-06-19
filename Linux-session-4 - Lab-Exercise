@@ -1,0 +1,425 @@
+LINUX LAB EXERCISE – FILE PERMISSIONS AND UMASK
+===============================================
+
+Objective
+=========
+1. View file and directory permissions.
+2. Understand User, Group and Others permissions.
+3. Change permissions using Numeric Method.
+4. Change permissions using Symbolic Method.
+5. Understand and calculate Umask values.
+
+--------------------------------------------------
+Exercise 1: Create Lab Environment
+--------------------------------------------------
+
+Create a directory and move into it:
+
+# mkdir permission-lab
+# cd permission-lab
+
+Create files and directories:
+
+# touch file1 file2
+# mkdir dir1 dir2
+
+Verify:
+
+# ls
+
+--------------------------------------------------
+Exercise 2: Check Default Permissions
+--------------------------------------------------
+
+# ls -l
+
+or
+
+# ll
+
+Observe the output:
+
+-rw-r--r-- 1 root root    0 Jun 18 10:00 file1
+drwxr-xr-x 2 root root    6 Jun 18 10:00 dir1
+
+Identify:
+-----------
+Field 1 : File Type and Permissions
+Field 2 : Link Count
+Field 3 : Owner
+Field 4 : Group
+Field 5 : File Size
+Field 6 : Last Modified Date and Time
+Field 7 : File Name
+
+--------------------------------------------------
+Exercise 3: Understanding File Permissions
+--------------------------------------------------
+
+Create a file:
+
+# echo "Linux Permission Demo" > file1
+
+Read the file:
+
+# cat file1
+
+Modify the file:
+
+# echo "New Line" >> file1
+
+Provide execute permission:
+
+# chmod +x file1
+
+Check permission:
+
+# ls -l file1
+
+File Permissions:
+-----------------
+Read (r)    - View file contents
+Write (w)   - Modify file contents
+Execute (x) - Run script/program
+
+--------------------------------------------------
+Exercise 4: Understanding Directory Permissions
+--------------------------------------------------
+
+Create files inside directory:
+
+# touch dir1/test1
+# touch dir1/test2
+
+List directory contents:
+
+# ls dir1
+
+Create a new file:
+
+# touch dir1/test3
+
+Enter the directory:
+
+# cd dir1
+# pwd
+# cd ..
+
+Directory Permissions:
+----------------------
+Read (r)    - List contents
+Write (w)   - Create/Delete files
+Execute (x) - Enter the directory
+
+--------------------------------------------------
+Exercise 5: Numeric Permission Method
+--------------------------------------------------
+
+Create a file:
+
+# touch numeric.txt
+
+Assign permission 744:
+
+# chmod 744 numeric.txt
+
+Verify:
+
+# ls -l numeric.txt
+
+Permission Calculation:
+-----------------------
+7 = rwx = 4+2+1
+4 = r--
+4 = r--
+
+744 = rwxr--r--
+
+--------------------------------------------------
+Exercise 6: Practice Numeric Permissions
+--------------------------------------------------
+
+Assign 640:
+
+# chmod 640 numeric.txt
+# ls -l numeric.txt
+
+Assign 440:
+
+# chmod 440 numeric.txt
+# ls -l numeric.txt
+
+Assign 600:
+
+# chmod 600 numeric.txt
+# ls -l numeric.txt
+
+--------------------------------------------------
+Exercise 7: Symbolic Permission Method
+--------------------------------------------------
+
+Create a file:
+
+# touch symbolic.txt
+
+Assign permissions:
+
+# chmod u=rwx,g=rw,o=r symbolic.txt
+
+Verify:
+
+# ls -l symbolic.txt
+
+Expected Permission:
+
+-rwxrw-r--
+
+--------------------------------------------------
+Exercise 8: Modify Existing Permissions
+--------------------------------------------------
+
+Remove execute permission from user:
+
+# chmod u-x symbolic.txt
+
+Remove read and write from group:
+
+# chmod g-rw symbolic.txt
+
+Add read permission for others:
+
+# chmod o+r symbolic.txt
+
+Verify:
+
+# ls -l symbolic.txt
+
+--------------------------------------------------
+Exercise 9: Permission Calculation Practice
+--------------------------------------------------
+
+Convert the following:
+
+777 = rwxrwxrwx
+
+755 = rwxr-xr-x
+
+744 = rwxr--r--
+
+640 = rw-r-----
+
+600 = rw-------
+
+444 = r--r--r--
+
+--------------------------------------------------
+Exercise 10: Check Current Umask
+--------------------------------------------------
+
+Check current umask value:
+
+# umask
+
+Expected Output:
+
+022
+
+--------------------------------------------------
+Exercise 11: Verify Default Permissions
+--------------------------------------------------
+
+Create file and directory:
+
+# touch testfile
+# mkdir testdir
+
+Verify:
+
+# ls -ld testfile testdir
+
+Expected Permissions:
+
+-rw-r--r-- testfile
+drwxr-xr-x testdir
+
+Calculation:
+------------
+
+File:
+666
+022
+---
+644
+
+Directory:
+777
+022
+---
+755
+
+--------------------------------------------------
+Exercise 12: Change Umask Temporarily
+--------------------------------------------------
+
+Set umask:
+
+# umask 222
+
+Verify:
+
+# umask
+
+Create file and directory:
+
+# touch tempfile
+# mkdir tempdir
+
+Check permissions:
+
+# ls -ld tempfile tempdir
+
+Calculation:
+------------
+
+File:
+666
+222
+---
+444
+
+Directory:
+777
+222
+---
+555
+
+Expected:
+
+-r--r--r--
+dr-xr-xr-x
+
+--------------------------------------------------
+Exercise 13: Restore Default Umask
+--------------------------------------------------
+
+# umask 022
+
+Verify:
+
+# umask
+
+--------------------------------------------------
+Exercise 14: Set Permanent Umask
+--------------------------------------------------
+
+Open .bash_profile:
+
+# vi ~/.bash_profile
+
+Add the following line:
+
+umask 222
+
+Save and Exit.
+
+Apply changes:
+
+# source ~/.bash_profile
+
+Verify:
+
+# umask
+
+--------------------------------------------------
+Exercise 15: Permission Troubleshooting
+--------------------------------------------------
+
+Create a file:
+
+# touch secure.txt
+
+Remove all permissions:
+
+# chmod 000 secure.txt
+
+Verify:
+
+# ls -l secure.txt
+
+Try to read:
+
+# cat secure.txt
+
+Observe:
+---------
+Permission denied
+
+Restore permission:
+
+# chmod 644 secure.txt
+
+--------------------------------------------------
+Exercise 16: Permission Observation
+--------------------------------------------------
+
+Create a file:
+
+# touch project.txt
+
+Apply permissions one by one:
+
+# chmod 777 project.txt
+# ls -l project.txt
+
+# chmod 755 project.txt
+# ls -l project.txt
+
+# chmod 644 project.txt
+# ls -l project.txt
+
+# chmod 600 project.txt
+# ls -l project.txt
+
+# chmod 400 project.txt
+# ls -l project.txt
+
+# chmod 000 project.txt
+# ls -l project.txt
+
+--------------------------------------------------
+Viva Questions
+--------------------------------------------------
+
+1. What are the three types of permissions in Linux?
+2. What does Read permission mean for a file?
+3. What does Write permission mean for a file?
+4. What does Execute permission mean for a file?
+5. What does Read permission mean for a directory?
+6. What does Write permission mean for a directory?
+7. What does Execute permission mean for a directory?
+8. What command is used to change permissions?
+9. What are the numeric values of Read, Write and Execute?
+10. What does 777 mean?
+11. What does 755 mean?
+12. What does 644 mean?
+13. What is Umask?
+14. What is the default full permission for a file?
+15. What is the default full permission for a directory?
+16. How do you check the current Umask value?
+17. How do you change Umask temporarily?
+18. How do you change Umask permanently?
+19. What permissions are created by Umask 022 for files?
+20. What permissions are created by Umask 022 for directories?
+
+Conclusion
+==========
+
+1. Linux permissions are assigned to User, Group and Others.
+2. Read = 4, Write = 2, Execute = 1.
+3. Permissions can be changed using Numeric and Symbolic methods.
+4. Full permission for files is 666.
+5. Full permission for directories is 777.
+6. Umask removes permissions from the default values.
+7. Default Umask 022 creates:
+   Files       -> 644
+   Directories -> 755
