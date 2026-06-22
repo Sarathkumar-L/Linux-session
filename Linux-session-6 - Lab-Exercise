@@ -1,0 +1,310 @@
+# Linux ACL (Access Control List) – Lab Exercise
+
+## Objective
+
+Learn how to provide additional permissions to specific users and groups without changing the standard owner, group, or others permissions.
+
+---
+
+## Lab Setup
+
+### Step 1: Create Users and Groups
+
+```bash
+groupadd developers
+groupadd testing
+
+useradd user1
+useradd user2
+useradd user3
+```
+
+### Step 2: Create Shared Directory
+
+(Assume `/secure` is already created and used as the shared directory.)
+
+```bash
+mkdir /secure
+chmod 770 /secure
+
+ls -ld /secure
+```
+
+---
+
+## Task 1: Verify Default ACL
+
+### Check ACL on Directory
+
+```bash
+getfacl /secure
+```
+
+### Observe Output
+
+```bash
+# file: secure
+# owner: root
+# group: root
+
+user::rwx
+group::rwx
+other::---
+```
+
+---
+
+## Task 2: Grant ACL Permission to a Specific User
+
+### Give Full Permission to user1
+
+```bash
+setfacl -m u:user1:rwx /secure
+
+getfacl /secure
+```
+
+### Verify
+
+Look for:
+
+```bash
+user:user1:rwx
+```
+
+---
+
+## Task 3: Grant Read and Execute Permission to a User
+
+### Give Read and Execute Permission to user2
+
+```bash
+setfacl -m u:user2:rx /secure
+
+getfacl /secure
+```
+
+### Verify
+
+```bash
+user:user2:r-x
+```
+
+---
+
+## Task 4: Grant ACL Permission Using Numeric Method
+
+### Give Full Permission to user3
+
+```bash
+setfacl -m u:user3:7 /secure
+
+getfacl /secure
+```
+
+### Verify
+
+```bash
+user:user3:rwx
+```
+
+---
+
+## Task 5: Grant ACL Permission to a Group
+
+### Assign ACL to developers Group
+
+```bash
+setfacl -m g:developers:rwx /secure
+
+getfacl /secure
+```
+
+### Verify
+
+```bash
+group:developers:rwx
+```
+
+---
+
+## Task 6: Grant Read-Only Permission to a Group
+
+### Assign Read Permission to testing Group
+
+```bash
+setfacl -m g:testing:r-- /secure
+
+getfacl /secure
+```
+
+### Verify
+
+```bash
+group:testing:r--
+```
+
+---
+
+## Task 7: Verify Multiple ACL Entries
+
+```bash
+getfacl /secure
+```
+
+Expected Output:
+
+```bash
+user::rwx
+user:user1:rwx
+user:user2:r-x
+user:user3:rwx
+
+group::rwx
+group:developers:rwx
+group:testing:r--
+
+mask::rwx
+other::---
+```
+
+---
+
+## Task 8: Remove ACL for a Specific User
+
+### Remove ACL of user2
+
+```bash
+setfacl -x u:user2 /secure
+
+getfacl /secure
+```
+
+### Verify
+
+Entry for user2 should be removed.
+
+---
+
+## Task 9: Remove ACL for a Specific Group
+
+### Remove ACL of testing Group
+
+```bash
+setfacl -x g:testing /secure
+
+getfacl /secure
+```
+
+### Verify
+
+Entry for testing group should be removed.
+
+---
+
+## Task 10: Apply ACL Recursively
+
+### Create Subdirectories and Files
+
+```bash
+mkdir /secure/project
+touch /secure/project/file1
+touch /secure/project/file2
+```
+
+### Apply ACL Recursively
+
+```bash
+setfacl -R -m g:developers:rwx /secure
+
+getfacl -R /secure
+```
+
+### Verify
+
+ACL should be applied to all files and directories under `/secure`.
+
+---
+
+## Task 11: Remove All ACL Entries
+
+### Remove All Additional ACLs
+
+```bash
+setfacl -b /secure
+```
+
+### Verify
+
+```bash
+getfacl /secure
+```
+
+Expected Output:
+
+```bash
+user::rwx
+group::rwx
+other::---
+```
+
+All additional ACL entries should be removed.
+
+---
+
+## Task 12: Remove All ACLs Recursively
+
+```bash
+setfacl -R -b /secure
+
+getfacl -R /secure
+```
+
+### Verify
+
+All ACL entries under `/secure` should be removed.
+
+---
+
+# Quick Reference Commands
+
+### View ACL
+
+```bash
+getfacl /secure
+getfacl -R /secure
+```
+
+### Add ACL
+
+```bash
+setfacl -m u:user1:rwx /secure
+setfacl -m g:developers:rwx /secure
+```
+
+### Remove ACL
+
+```bash
+setfacl -x u:user1 /secure
+setfacl -x g:developers /secure
+```
+
+### Remove All ACLs
+
+```bash
+setfacl -b /secure
+setfacl -R -b /secure
+```
+
+---
+
+## Verification Questions
+
+1. What is ACL?
+2. Why do we use ACL when Linux already has rwx permissions?
+3. Which command is used to view ACL entries?
+4. Which command is used to add ACL entries?
+5. What does `setfacl -m u:user1:rwx /secure` do?
+6. What does `setfacl -x u:user1 /secure` do?
+7. What does `setfacl -b /secure` do?
+8. What is the purpose of `-R` in ACL commands?
