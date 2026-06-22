@@ -1,0 +1,379 @@
+# Linux Ownership and Special Permissions – Lab Exercise
+
+## Lab 1: Change Ownership and Group of Files/Directories
+
+### Objective
+
+Learn how to change the owner and group of files and directories using `chown` and `chgrp`.
+
+### Step 1: Create Users and Groups
+
+```bash
+groupadd developers
+groupadd testing
+
+useradd user1
+useradd user2
+```
+
+### Step 2: Create a Test Directory and Files
+
+```bash
+mkdir /tmp/lab-ownership
+touch /tmp/lab-ownership/file1
+touch /tmp/lab-ownership/file2
+
+ls -l /tmp/lab-ownership
+```
+
+---
+
+### Task 1: Change Owner Only
+
+```bash
+chown user1 /tmp/lab-ownership/file1
+
+ls -l /tmp/lab-ownership/file1
+```
+
+**Expected Result:**
+
+* Owner becomes `user1`
+* Group remains unchanged
+
+---
+
+### Task 2: Change Group Only
+
+```bash
+chgrp developers /tmp/lab-ownership/file1
+
+ls -l /tmp/lab-ownership/file1
+```
+
+**Expected Result:**
+
+* Group becomes `developers`
+
+---
+
+### Task 3: Change Owner and Group Together
+
+```bash
+chown user2:testing /tmp/lab-ownership/file2
+
+ls -l /tmp/lab-ownership/file2
+```
+
+**Expected Result:**
+
+* Owner becomes `user2`
+* Group becomes `testing`
+
+---
+
+### Task 4: Change Ownership Recursively
+
+```bash
+mkdir /tmp/lab-ownership/project
+touch /tmp/lab-ownership/project/test1
+touch /tmp/lab-ownership/project/test2
+
+chown -R user1:developers /tmp/lab-ownership/project
+
+ls -l /tmp/lab-ownership/project
+```
+
+**Expected Result:**
+
+* All files and directories inside `project` belong to `user1:developers`
+
+---
+
+## Lab 2: Special Permissions – SUID
+
+### Objective
+
+Understand how SUID allows a user to execute a command with the permissions of the file owner.
+
+---
+
+### Step 1: Verify Location of Commands
+
+```bash
+which useradd
+which userdel
+```
+
+Expected Output:
+
+```bash
+/usr/sbin/useradd
+/usr/sbin/userdel
+```
+
+---
+
+### Step 2: Check Current Permissions
+
+```bash
+ls -l /usr/sbin/useradd
+ls -l /usr/sbin/userdel
+```
+
+Observe that SUID is not set.
+
+---
+
+### Step 3: Set SUID on useradd
+
+```bash
+chmod u+s /usr/sbin/useradd
+
+ls -l /usr/sbin/useradd
+```
+
+Expected Output:
+
+```bash
+-rwsr-xr-x
+```
+
+Notice the **s** in the owner's execute position.
+
+---
+
+### Step 4: Remove SUID
+
+```bash
+chmod u-s /usr/sbin/useradd
+
+ls -l /usr/sbin/useradd
+```
+
+---
+
+### Step 5: Set SUID Using Numeric Method
+
+```bash
+chmod 4755 /usr/sbin/userdel
+
+ls -l /usr/sbin/userdel
+```
+
+Expected Output:
+
+```bash
+-rwsr-xr-x
+```
+
+---
+
+### Step 6: Remove SUID
+
+```bash
+chmod 755 /usr/sbin/userdel
+
+ls -l /usr/sbin/userdel
+```
+
+---
+
+### Verification of Common SUID Commands
+
+```bash
+ls -l /usr/bin/passwd
+ls -l /usr/bin/su
+```
+
+Observe the **s** in owner execute field.
+
+---
+
+## Lab 3: SGID on Files
+
+### Objective
+
+Understand how SGID allows a program to run with the group permissions of the file owner group.
+
+### Step 1: Create a Test File
+
+```bash
+touch /tmp/sgid-file
+ls -l /tmp/sgid-file
+```
+
+### Step 2: Set SGID
+
+```bash
+chmod g+s /tmp/sgid-file
+
+ls -l /tmp/sgid-file
+```
+
+Expected Output:
+
+```bash
+-rw-r-sr--
+```
+
+Observe the **s** in the group execute field.
+
+---
+
+### Step 3: Remove SGID
+
+```bash
+chmod g-s /tmp/sgid-file
+
+ls -l /tmp/sgid-file
+```
+
+---
+
+### Step 4: Set SGID Using Numeric Method
+
+```bash
+chmod 2755 /tmp/sgid-file
+
+ls -l /tmp/sgid-file
+```
+
+---
+
+## Lab 4: SGID on Directories
+
+### Objective
+
+Understand how SGID on a directory forces all newly created files to inherit the directory's group.
+
+### Step 1: Create Directory
+
+```bash
+mkdir /tmp/shared-data
+
+groupadd projectteam
+chgrp projectteam /tmp/shared-data
+
+ls -ld /tmp/shared-data
+```
+
+---
+
+### Step 2: Set SGID on Directory
+
+```bash
+chmod g+s /tmp/shared-data
+
+ls -ld /tmp/shared-data
+```
+
+Expected Output:
+
+```bash
+drwxr-sr-x
+```
+
+---
+
+### Step 3: Create a File Inside Directory
+
+```bash
+touch /tmp/shared-data/testfile
+
+ls -l /tmp/shared-data
+```
+
+**Observation:**
+
+* Newly created file inherits group `projectteam`.
+
+---
+
+### Step 4: Remove SGID
+
+```bash
+chmod g-s /tmp/shared-data
+
+ls -ld /tmp/shared-data
+```
+
+---
+
+## Lab 5: Sticky Bit
+
+### Objective
+
+Understand how Sticky Bit prevents users from deleting files owned by other users.
+
+### Step 1: Create a Shared Directory
+
+```bash
+mkdir /tmp/public-data
+chmod 777 /tmp/public-data
+
+ls -ld /tmp/public-data
+```
+
+---
+
+### Step 2: Set Sticky Bit
+
+```bash
+chmod o+t /tmp/public-data
+
+ls -ld /tmp/public-data
+```
+
+Expected Output:
+
+```bash
+drwxrwxrwt
+```
+
+Observe the **t** in others execute field.
+
+---
+
+### Step 3: Set Sticky Bit Using Numeric Method
+
+```bash
+chmod 1777 /tmp/public-data
+
+ls -ld /tmp/public-data
+```
+
+---
+
+### Step 4: Remove Sticky Bit
+
+```bash
+chmod o-t /tmp/public-data
+
+ls -ld /tmp/public-data
+```
+
+---
+
+## Summary Table
+
+| Permission | Symbolic Command     | Numeric Value | Purpose                                                     |
+| ---------- | -------------------- | ------------- | ----------------------------------------------------------- |
+| SUID       | `chmod u+s file`     | 4             | Executes with owner's permissions                           |
+| SGID       | `chmod g+s file/dir` | 2             | Executes with group's permissions / Inherit group ownership |
+| Sticky Bit | `chmod o+t dir`      | 1             | Only owner/root can delete files                            |
+
+### Verification Commands
+
+```bash
+ls -l filename
+ls -ld dirname
+```
+
+Look for:
+
+```bash
+-rwsr-xr-x   -> SUID
+-rwxr-sr-x   -> SGID
+drwxrwxrwt   -> Sticky Bit
+```
