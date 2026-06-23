@@ -1,0 +1,498 @@
+# Lab Exercise – User Management in Linux
+
+## Objective
+
+To learn and practice Linux user and group management, user modification, password aging policies, and verification of user-related configuration files.
+
+---
+
+## Exercise 1: Verify Current User
+
+### Step 1: Check the current logged-in user
+
+```bash
+whoami
+```
+
+### Step 2: Verify user details
+
+```bash
+id
+```
+
+### Step 3: Check all logged-in users
+
+```bash
+who
+```
+
+---
+
+## Exercise 2: Create a New User
+
+### Step 1: Create a user
+
+```bash
+useradd user1
+```
+
+### Step 2: Set password for the user
+
+```bash
+passwd user1
+```
+
+### Step 3: Verify user entry
+
+```bash
+grep user1 /etc/passwd
+```
+
+### Step 4: Verify password entry
+
+```bash
+grep user1 /etc/shadow
+```
+
+### Step 5: Verify home directory
+
+```bash
+ls -ld /home/user1
+```
+
+### Step 6: Verify mailbox file
+
+```bash
+ls -l /var/spool/mail/user1
+```
+
+---
+
+## Exercise 3: Understanding User Information Files
+
+### Verify User Details
+
+```bash
+cat /etc/passwd
+```
+
+### Verify Password Details
+
+```bash
+cat /etc/shadow
+```
+
+### Verify Group Details
+
+```bash
+cat /etc/group
+```
+
+### Verify Group Password Details
+
+```bash
+cat /etc/gshadow
+```
+
+### Find Specific User Details
+
+```bash
+grep user1 /etc/passwd
+grep user1 /etc/shadow
+```
+
+---
+
+## Exercise 4: Create and Manage Groups
+
+### Step 1: Create a group
+
+```bash
+groupadd linuxgroup
+```
+
+### Step 2: Verify group creation
+
+```bash
+grep linuxgroup /etc/group
+```
+
+### Step 3: Add user to group
+
+```bash
+gpasswd -a user1 linuxgroup
+```
+
+### Step 4: Verify group membership
+
+```bash
+grep linuxgroup /etc/group
+```
+
+### Step 5: Remove user from group
+
+```bash
+gpasswd -d user1 linuxgroup
+```
+
+### Step 6: Verify removal
+
+```bash
+grep linuxgroup /etc/group
+```
+
+### Step 7: Delete group
+
+```bash
+groupdel linuxgroup
+```
+
+### Step 8: Verify deletion
+
+```bash
+grep linuxgroup /etc/group
+```
+
+---
+
+## Exercise 5: User Modification Using usermod
+
+### Create a user for testing
+
+```bash
+useradd testuser
+passwd testuser
+```
+
+---
+
+### Change Login Name
+
+```bash
+usermod -l newuser testuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/passwd
+```
+
+---
+
+### Change User ID
+
+```bash
+usermod -u 2222 newuser
+```
+
+Verify:
+
+```bash
+id newuser
+```
+
+---
+
+### Change User Comment
+
+```bash
+usermod -c "I am a Developer" newuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/passwd
+```
+
+---
+
+### Change Home Directory
+
+```bash
+usermod -d /home/newhome newuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/passwd
+```
+
+---
+
+### Change Primary Group
+
+Create a group first:
+
+```bash
+groupadd developers
+```
+
+Find group ID:
+
+```bash
+grep developers /etc/group
+```
+
+Assign the group:
+
+```bash
+usermod -g developers newuser
+```
+
+Verify:
+
+```bash
+id newuser
+```
+
+---
+
+### Change Login Shell
+
+```bash
+usermod -s /bin/sh newuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/passwd
+```
+
+---
+
+## Exercise 6: Lock and Unlock User Account
+
+### Lock User Account
+
+```bash
+usermod -L newuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/shadow
+```
+
+### Unlock User Account
+
+```bash
+usermod -U newuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/shadow
+```
+
+---
+
+## Exercise 7: Lock and Unlock Password
+
+### Lock Password
+
+```bash
+passwd -l newuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/shadow
+```
+
+### Unlock Password
+
+```bash
+passwd -u newuser
+```
+
+Verify:
+
+```bash
+grep newuser /etc/shadow
+```
+
+---
+
+## Exercise 8: Password Aging Management (chage)
+
+### View Current Password Aging Information
+
+```bash
+chage -l newuser
+```
+
+---
+
+### Set Minimum Days
+
+```bash
+chage -m 3 newuser
+```
+
+Verify:
+
+```bash
+chage -l newuser
+```
+
+---
+
+### Set Maximum Days
+
+```bash
+chage -M 60 newuser
+```
+
+Verify:
+
+```bash
+chage -l newuser
+```
+
+---
+
+### Set Warning Days
+
+```bash
+chage -W 3 newuser
+```
+
+Verify:
+
+```bash
+chage -l newuser
+```
+
+---
+
+### Set Inactive Days
+
+```bash
+chage -I 7 newuser
+```
+
+Verify:
+
+```bash
+chage -l newuser
+```
+
+---
+
+### Set Password Expiry Date
+
+```bash
+chage -E 2027-01-01 newuser
+```
+
+Verify:
+
+```bash
+chage -l newuser
+```
+
+---
+
+## Exercise 9: Observe Password Status in /etc/shadow
+
+### User without password
+
+```bash
+useradd nopassuser
+grep nopassuser /etc/shadow
+```
+
+Expected:
+
+```text
+!!
+```
+
+---
+
+### User with password
+
+```bash
+passwd nopassuser
+grep nopassuser /etc/shadow
+```
+
+Expected:
+
+```text
+$6$xxxxxxxxxxxxxxxx
+```
+
+(Encrypted password)
+
+---
+
+### Lock the password
+
+```bash
+passwd -l nopassuser
+grep nopassuser /etc/shadow
+```
+
+Expected:
+
+```text
+!$6$xxxxxxxxxxxxxxxx
+```
+
+or
+
+```text
+!!$6$xxxxxxxxxxxxxxxx
+```
+
+---
+
+## Exercise 10: Delete a User
+
+### Step 1: Delete the user and home directory
+
+```bash
+userdel -r nopassuser
+```
+
+### Step 2: Verify deletion
+
+```bash
+grep nopassuser /etc/passwd
+```
+
+### Step 3: Verify home directory removal
+
+```bash
+ls /home
+```
+
+---
+
+# Viva Questions
+
+1. What is the UID of the root user?
+2. What is the UID range of normal users?
+3. Which file stores user account information?
+4. Which file stores encrypted passwords?
+5. What is the purpose of `/etc/group`?
+6. What is the difference between `useradd` and `usermod`?
+7. What is the purpose of `userdel -r`?
+8. What is a primary group?
+9. What does `passwd -l` do?
+10. What is the purpose of the `chage` command?
+11. What does `!!` indicate in `/etc/shadow`?
+12. What is the difference between locking a user account and locking a password?
+13. How do you add a user to a group?
+14. How do you remove a user from a group?
+15. Which command displays password aging information?
+
+**Expected Result:** Students should be able to create, modify, lock/unlock, and delete users and groups, manage password policies, and understand the purpose of `/etc/passwd`, `/etc/shadow`, `/etc/group`, and `/etc/gshadow`.
