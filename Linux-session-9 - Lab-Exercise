@@ -1,0 +1,501 @@
+# Lab Exercise – Linux Process Management
+
+## Objective
+
+Learn how to view, monitor, manage, stop, resume, and terminate processes in Linux.
+
+---
+
+## Exercise 1: Verify the First Process (systemd)
+
+1. Display all running processes.
+
+```bash
+ps -ef
+```
+
+2. Observe the process with PID 1.
+
+```bash
+ps -p 1
+```
+
+3. Display detailed information.
+
+```bash
+ps -fp 1
+```
+
+### Expected Observation
+
+* PID 1 is usually `systemd`.
+* It is the parent of most system processes.
+
+---
+
+## Exercise 2: View Running Processes
+
+### Using top
+
+```bash
+top
+```
+
+Tasks:
+
+* Observe CPU usage.
+* Observe Memory usage.
+* Observe PID and USER columns.
+* Press `q` to quit.
+
+---
+
+### Using ps
+
+```bash
+ps -ef
+```
+
+```bash
+ps aux
+```
+
+### Compare
+
+* `top` shows real-time information.
+* `ps` shows a snapshot of current processes.
+
+---
+
+## Exercise 3: Display Processes of a Specific User
+
+1. Create a user.
+
+```bash
+useradd student1
+passwd student1
+```
+
+2. Check processes owned by the user.
+
+```bash
+ps -u student1
+```
+
+3. Check your own processes.
+
+```bash
+ps -u $(whoami)
+```
+
+---
+
+## Exercise 4: Identify Terminal (TTY)
+
+1. Check current terminal.
+
+```bash
+tty
+```
+
+Example Output:
+
+```bash
+/dev/pts/0
+```
+
+2. View process TTY information.
+
+```bash
+ps -ef
+```
+
+Observe:
+
+* Processes attached to a terminal show TTY values.
+* Daemon processes show `?` in the TTY column.
+
+---
+
+## Exercise 5: Display Custom Process Information
+
+Run:
+
+```bash
+ps -eo user,pid,ppid,%cpu,%mem,cmd
+```
+
+Identify:
+
+* USER
+* PID
+* PPID
+* CPU Usage
+* Memory Usage
+* Command
+
+---
+
+## Exercise 6: Understand Parent and Child Processes
+
+1. Open a new terminal.
+
+2. Start a process:
+
+```bash
+sleep 300
+```
+
+3. Find its PID and PPID.
+
+```bash
+ps -ef | grep sleep
+```
+
+Observe:
+
+* PID → Process ID
+* PPID → Parent Process ID
+
+4. Display process tree.
+
+```bash
+ps -ef --forest
+```
+
+or
+
+```bash
+pstree
+```
+
+---
+
+## Exercise 7: Start a Foreground Process
+
+1. Open VI editor.
+
+```bash
+vi file1
+```
+
+2. Observe:
+
+* Process occupies the terminal.
+* User interaction is required.
+
+3. Exit the editor.
+
+```bash
+:q!
+```
+
+---
+
+## Exercise 8: Start a Background Process
+
+1. Run a command in background.
+
+```bash
+sleep 300 &
+```
+
+2. Verify.
+
+```bash
+jobs
+```
+
+3. Check process.
+
+```bash
+ps -ef | grep sleep
+```
+
+### Expected Observation
+
+* Process runs in background.
+* Terminal remains usable.
+
+---
+
+## Exercise 9: Process States
+
+Create a process.
+
+```bash
+sleep 300
+```
+
+Open another terminal and check:
+
+```bash
+ps -el
+```
+
+Observe state column.
+
+### Common States
+
+| State | Meaning               |
+| ----- | --------------------- |
+| R     | Running               |
+| S     | Sleeping              |
+| D     | Uninterruptible Sleep |
+| T     | Stopped               |
+| Z     | Zombie                |
+
+---
+
+## Exercise 10: Stop and Resume a Process
+
+1. Start a process.
+
+```bash
+sleep 300 &
+```
+
+2. Find PID.
+
+```bash
+ps -ef | grep sleep
+```
+
+3. Stop the process.
+
+```bash
+kill -19 PID
+```
+
+4. Verify status.
+
+```bash
+ps -el
+```
+
+Observe:
+
+* State becomes `T`.
+
+5. Resume the process.
+
+```bash
+kill -18 PID
+```
+
+6. Verify again.
+
+```bash
+ps -el
+```
+
+Observe:
+
+* Process returns to Running/Sleeping state.
+
+---
+
+## Exercise 11: Terminate a Process Gracefully
+
+1. Start a process.
+
+```bash
+sleep 300 &
+```
+
+2. Find PID.
+
+```bash
+ps -ef | grep sleep
+```
+
+3. Terminate it.
+
+```bash
+kill -15 PID
+```
+
+or
+
+```bash
+kill PID
+```
+
+4. Verify.
+
+```bash
+ps -ef | grep sleep
+```
+
+### Expected Observation
+
+* Process exits normally.
+
+---
+
+## Exercise 12: Force Kill a Process
+
+1. Start a process.
+
+```bash
+sleep 300 &
+```
+
+2. Find PID.
+
+```bash
+ps -ef | grep sleep
+```
+
+3. Forcefully terminate it.
+
+```bash
+kill -9 PID
+```
+
+4. Verify.
+
+```bash
+ps -ef | grep sleep
+```
+
+### Expected Observation
+
+* Process is immediately removed.
+
+---
+
+## Exercise 13: View Available Signals
+
+Display all signals supported by Linux.
+
+```bash
+kill -l
+```
+
+Identify:
+
+* SIGTERM (15)
+* SIGKILL (9)
+* SIGSTOP (19)
+* SIGCONT (18)
+
+---
+
+## Exercise 14: Using pkill
+
+1. Start multiple sleep processes.
+
+```bash
+sleep 500 &
+sleep 500 &
+sleep 500 &
+```
+
+2. Verify.
+
+```bash
+ps -ef | grep sleep
+```
+
+3. Kill all sleep processes.
+
+```bash
+pkill sleep
+```
+
+4. Verify again.
+
+```bash
+ps -ef | grep sleep
+```
+
+---
+
+## Exercise 15: Process Priority and Nice Value
+
+1. Display process priorities.
+
+```bash
+top
+```
+
+Observe:
+
+* PR = Priority
+* NI = Nice Value
+
+---
+
+2. Start a process with default nice value.
+
+```bash
+sleep 300 &
+```
+
+3. Start a process with lower priority.
+
+```bash
+nice -n 10 sleep 300 &
+```
+
+4. Check priorities.
+
+```bash
+ps -el
+```
+
+Observe the PRI and NI columns.
+
+---
+
+## Exercise 16: Change Nice Value of a Running Process
+
+1. Start a process.
+
+```bash
+sleep 300 &
+```
+
+2. Find PID.
+
+```bash
+ps -ef | grep sleep
+```
+
+3. Change nice value.
+
+```bash
+renice 5 -p PID
+```
+
+4. Verify.
+
+```bash
+ps -el
+```
+
+---
+
+# Viva Questions
+
+1. What is a process?
+2. What is the difference between a program and a process?
+3. What is a foreground process?
+4. What is a background process?
+5. What is PID?
+6. What is PPID?
+7. What is the first process in Linux?
+8. What is the purpose of `top`?
+9. What is the difference between `top` and `ps -ef`?
+10. What is a daemon process?
+11. Why does a daemon process show `?` in the TTY column?
+12. What is a zombie process?
+13. What does process state `R` indicate?
+14. What does process state `S` indicate?
+15. What is the difference between SIGTERM and SIGKILL?
+16. What is the purpose of `kill -19`?
+17. What is the purpose of `kill -18`?
+18. What is nice value?
+19. What is process priority?
+20. How can you display all available signals in Linux?
