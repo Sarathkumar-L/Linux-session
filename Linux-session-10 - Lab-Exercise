@@ -1,0 +1,455 @@
+# Lab Exercise – Service & Daemon Management in Linux
+
+## Objective
+
+Learn how to manage Linux services (daemons) using `systemctl` and gather system information using `hostnamectl`.
+
+---
+
+# Exercise 1: Verify Running Daemon Processes
+
+### View daemon processes
+
+```bash
+ps -ef | grep sshd
+```
+
+```bash
+ps -ef | grep crond
+```
+
+```bash
+ps -ef | grep firewalld
+```
+
+### Observe
+
+* Daemon processes run in the background.
+* Most daemon names end with `d`.
+* They usually have `?` in the TTY column.
+
+---
+
+# Exercise 2: Check Service Status
+
+### Check Firewalld Status
+
+```bash
+systemctl status firewalld
+```
+
+### Check Cron Service Status
+
+```bash
+systemctl status crond
+```
+
+### Check SSH Service Status
+
+```bash
+systemctl status sshd
+```
+
+### Observe
+
+Identify:
+
+* Active (running)
+* Inactive (dead)
+* Enabled
+* Disabled
+
+---
+
+# Exercise 3: Start a Service
+
+### Stop the service first
+
+```bash
+systemctl stop firewalld
+```
+
+### Verify status
+
+```bash
+systemctl status firewalld
+```
+
+### Start the service
+
+```bash
+systemctl start firewalld
+```
+
+### Verify again
+
+```bash
+systemctl status firewalld
+```
+
+### Expected Result
+
+Service status changes from **inactive** to **active (running)**.
+
+---
+
+# Exercise 4: Stop a Service
+
+### Stop Firewalld
+
+```bash
+systemctl stop firewalld
+```
+
+### Verify
+
+```bash
+systemctl status firewalld
+```
+
+### Expected Result
+
+Service status becomes **inactive (dead)**.
+
+---
+
+# Exercise 5: Enable a Service
+
+### Enable Firewalld
+
+```bash
+systemctl enable firewalld
+```
+
+### Verify
+
+```bash
+systemctl is-enabled firewalld
+```
+
+### Expected Result
+
+```bash
+enabled
+```
+
+### Note
+
+The service will automatically start during system boot.
+
+---
+
+# Exercise 6: Disable a Service
+
+### Disable Firewalld
+
+```bash
+systemctl disable firewalld
+```
+
+### Verify
+
+```bash
+systemctl is-enabled firewalld
+```
+
+### Expected Result
+
+```bash
+disabled
+```
+
+---
+
+# Exercise 7: Enable and Start a Service Together
+
+### Run
+
+```bash
+systemctl enable --now firewalld
+```
+
+### Verify
+
+```bash
+systemctl status firewalld
+```
+
+```bash
+systemctl is-enabled firewalld
+```
+
+### Expected Result
+
+* Service is running.
+* Service is enabled.
+
+---
+
+# Exercise 8: Disable and Stop a Service Together
+
+### Run
+
+```bash
+systemctl disable --now firewalld
+```
+
+### Verify
+
+```bash
+systemctl status firewalld
+```
+
+```bash
+systemctl is-enabled firewalld
+```
+
+### Expected Result
+
+* Service is stopped.
+* Service is disabled.
+
+---
+
+# Exercise 9: List All Services
+
+### Display all services
+
+```bash
+systemctl list-units --type service --all
+```
+
+### Tasks
+
+Identify:
+
+* Loaded services
+* Running services
+* Failed services
+* Inactive services
+
+---
+
+# Exercise 10: List Running Services Only
+
+### Run
+
+```bash
+systemctl -t service
+```
+
+### Alternative
+
+```bash
+systemctl list-units --type=service
+```
+
+### Observe
+
+Count:
+
+* Number of running services
+* Important services such as sshd, crond, NetworkManager
+
+---
+
+# Exercise 11: Restart a Service
+
+### Restart SSH Service
+
+```bash
+systemctl restart sshd
+```
+
+### Verify
+
+```bash
+systemctl status sshd
+```
+
+### Expected Result
+
+Service restarts successfully without errors.
+
+---
+
+# Exercise 12: Reload a Service
+
+### Reload Firewalld
+
+```bash
+systemctl reload firewalld
+```
+
+### Verify
+
+```bash
+systemctl status firewalld
+```
+
+### Note
+
+Reload applies configuration changes without fully stopping the service.
+
+---
+
+# Exercise 13: Compare Restart and Reload
+
+### Restart Service
+
+```bash
+systemctl restart firewalld
+```
+
+### Reload Service
+
+```bash
+systemctl reload firewalld
+```
+
+### Observation Table
+
+| Command | Purpose                                            |
+| ------- | -------------------------------------------------- |
+| restart | Stops and starts the service                       |
+| reload  | Reloads configuration without stopping the service |
+
+---
+
+# Exercise 14: View Failed Services
+
+### Run
+
+```bash
+systemctl --failed
+```
+
+### Observe
+
+Check whether any services are in failed state.
+
+---
+
+# Exercise 15: Check Service Boot Status
+
+### Verify Enabled Services
+
+```bash
+systemctl list-unit-files --type=service
+```
+
+### Tasks
+
+Identify:
+
+* Enabled services
+* Disabled services
+* Static services
+
+---
+
+# Exercise 16: View Machine Information
+
+### Display System Information
+
+```bash
+hostnamectl
+```
+
+### Observe
+
+Identify:
+
+* Hostname
+* Operating System
+* Kernel Version
+* Architecture
+* Machine ID
+* Boot ID
+
+---
+
+# Exercise 17: Change Hostname
+
+### Set New Hostname
+
+```bash
+hostnamectl set-hostname server1.example.com
+```
+
+### Verify
+
+```bash
+hostnamectl
+```
+
+```bash
+hostname
+```
+
+### Expected Result
+
+New hostname should be displayed.
+
+---
+
+# Exercise 18: Combined Service Management Task
+
+### Task
+
+1. Check Firewalld status.
+2. Stop Firewalld.
+3. Verify status.
+4. Start Firewalld.
+5. Enable Firewalld.
+6. Verify boot status.
+7. Restart Firewalld.
+8. Reload Firewalld.
+9. Display machine information.
+
+Commands:
+
+```bash
+systemctl status firewalld
+
+systemctl stop firewalld
+
+systemctl status firewalld
+
+systemctl start firewalld
+
+systemctl enable firewalld
+
+systemctl is-enabled firewalld
+
+systemctl restart firewalld
+
+systemctl reload firewalld
+
+hostnamectl
+```
+
+---
+
+# Viva Questions
+
+1. What is a daemon process?
+2. Why do daemon names usually end with "d"?
+3. What is the purpose of systemctl?
+4. How do you check the status of a service?
+5. How do you start a service?
+6. How do you stop a service?
+7. What is the difference between enable and start?
+8. What is the difference between disable and stop?
+9. What does `systemctl enable --now` do?
+10. What does `systemctl disable --now` do?
+11. How do you list all services?
+12. How do you list only running services?
+13. What is the difference between restart and reload?
+14. How do you check failed services?
+15. What information does `hostnamectl` display?
+16. How do you change the hostname of a Linux system?
+17. What is the purpose of `sshd`?
+18. What is the purpose of `crond`?
+19. What is the purpose of `firewalld`?
+20. Which command is used to manage services in systemd-based Linux systems?
